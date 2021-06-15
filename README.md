@@ -34,6 +34,34 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 EXPOSE 8080
 
+
+**Docker Compose**
+
+version: "3.8"
+
+networks:
+  backend:
+    external: false
+    name: backend
+services:
+  mymoviedb:
+    networks:
+      - backend
+    image: mongo
+    container_name: mymoviedb
+    ports:
+      - 27017:27017
+  movie-app-image:
+    networks:
+      - backend
+    image: movie-app-image
+    container_name: movie-app-image
+    ports:
+      - 8080:8080
+    links:
+      - mymoviedb
+
+
 **Docker Mongo DB**
 
 docker run -d -p 27017:27017 --name <mongo_container_name> --net backend mongo:latest
